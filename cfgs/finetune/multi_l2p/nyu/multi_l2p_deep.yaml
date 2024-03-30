@@ -1,0 +1,92 @@
+# NYU semseg config
+
+# Finetune from:
+finetune:  "/root/datasets/multimae-b_98_rgb+-depth-semseg_1600e_multivit-afff3f8c (1).pth"
+
+# Input tasks
+in_domains: rgb
+seed : 0
+
+# Architecture
+model: multivit_base
+patch_size: 16
+num_global_tokens: 1
+drop_path_encoder: 0.1
+output_adapter: convnext
+decoder_dim: 6144
+decoder_preds_per_patch: 16
+decoder_depth: 4
+
+# Train
+epochs: 300
+opt: adamw
+lr: 0.000025 # = 1.5e-5
+warmup_lr: 0.00000025 # = 1e-6
+min_lr: 0.
+warmup_epochs: 1
+batch_size: 1
+input_size: 576
+layer_decay: 0.75
+weight_decay: 0.00001
+open_layer : None
+
+# Augmentation
+aug_name: simple
+
+# Data info
+# For NYUV2
+# data_path: "/root/datasets/NYUv2/train"
+# eval_data_path: "/root/datasets/NYUv2/test" # Change me
+# num_classes: 40
+# dataset_name: nyu
+# dist_eval: True
+# seg_reduce_zero_label: True
+# eval_freq: 10
+
+# For ADE20K
+# data_path: "/root/datasets/ADE20K/train"
+# eval_data_path: "/root/datasets/ADE20K/test" # Change me
+# num_classes: 150
+# dataset_name: ade20k
+# dist_eval: True
+# seg_reduce_zero_label: True
+# eval_freq: 10
+
+
+# For SUNRGBD
+data_path: "/root/datasets/ADE20K/train"
+eval_data_path: "/root/datasets/ADE20K/test" # Change me
+num_classes: 37
+dataset_name: sunrgbd
+dist_eval: True
+seg_reduce_zero_label: True
+eval_freq: 10
+
+# Misc.
+find_unused_params: False
+
+#prompt
+prompt_mode : deep
+prompt_pool : True
+prompt_shallow : False
+prompt_deep : True
+top_k : 5
+size : 5S
+length : 5 
+task_specific_prompt_length : 200
+not_self_attn : False
+use_prompt_mask : True
+
+# Loss Weight -> pass for debugging
+# fc_loss_weight : 20
+# mse_loss_weight : 1
+# prompt_loss_weight : 200
+
+# Wandb and logging
+log_wandb: True # Set to True to log to Weights & Biases
+wandb_project: 'SUNRGBD-Ablation-Loss_Weight'
+wandb_entity: null # Change if needed
+wandb_run_name: '20:1:200'
+log_images_wandb: False
+log_images_freq: 20
+output_dir: '/root/workspace/Results//20:1:200'
